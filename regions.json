@@ -1,0 +1,143 @@
+{
+  "countries": [
+    { "code": "SE", "label": "🇸🇪 Sverige", "hl": "sv", "gl": "se", "country": "Sverige" },
+    { "code": "NO", "label": "🇳🇴 Norge", "hl": "no", "gl": "no", "country": "Norge" },
+    { "code": "DK", "label": "🇩🇰 Danmark", "hl": "da", "gl": "dk", "country": "Danmark" },
+    { "code": "GB", "label": "🇬🇧 United Kingdom", "hl": "en", "gl": "uk", "country": "United Kingdom" },
+    { "code": "IE", "label": "🇮🇪 Ireland", "hl": "en", "gl": "ie", "country": "Ireland" }
+  ],
+  "branchesByCountry": {
+    "SE": [
+      { "name": "Tandvård", "queries": ["tandläkare", "tandvårdsklinik", "tandläkarmottagning"] },
+      { "name": "Skönhet & Hälsa", "queries": ["hudvårdsklinik", "skönhetssalong", "spa behandling"] },
+      { "name": "Frisörer", "queries": ["frisör", "frisörsalong", "hårsalong"] },
+      { "name": "Restauranger & Caféer", "queries": ["restaurang", "pizzeria", "café", "bistro", "sushi"] },
+      { "name": "Redovisningsbyråer", "queries": ["redovisningsbyrå", "bokföringsbyrå", "revisionsbyrå"] },
+      { "name": "Advokatbyråer", "queries": ["advokatbyrå", "juristbyrå", "juridisk byrå"] },
+      { "name": "Konsultbolag", "queries": ["konsultbolag", "managementkonsult", "IT-konsult"] },
+      { "name": "Fastighetsmäklare", "queries": ["fastighetsmäklare", "mäklarbyrå", "mäklarfirma"] },
+      { "name": "Städfirmor", "queries": ["städfirma", "städbolag", "hemstäd", "flyttstäd", "kontorsstädning"] },
+      { "name": "Snickare", "queries": ["snickare", "snickeri", "träarbeten", "snickerifirma"] },
+      { "name": "Elektriker", "queries": ["elektriker", "elfirma", "elinstallation", "elentreprenör"] },
+      { "name": "Takläggare", "queries": ["takläggare", "takentreprenör", "takfirma", "takarbeten"] },
+      { "name": "Målare", "queries": ["målare", "målerifirma", "måleriföretag", "målningsarbeten"] },
+      { "name": "VVS", "queries": ["VVS", "VVS-firma", "rörläggare", "rörmokare"] },
+      { "name": "Hantverkare", "queries": ["byggfirma", "plattsättare", "murare", "golvläggare"] },
+      { "name": "Fastighetsbolag", "queries": ["fastighetsbolag", "fastighetsägare", "fastighetsförvaltning", "fastighetsutveckling"] },
+      { "name": "Industribolag", "queries": ["industribolag", "tillverkningsföretag", "industriföretag", "mekanisk verkstad", "verkstadsindustri"] }
+    ],
+    "NO": [
+      { "name": "Håndverkere", "queries": ["snekker", "tømrer", "maler", "rørlegger", "elektriker", "byggefirma", "håndverker"] },
+      { "name": "Rengjøring", "queries": ["rengjøringsfirma", "vaskebyrå", "hjemmerengjøring", "flyttevask", "kontorrengjøring"] },
+      { "name": "Hairdressers", "queries": ["hair salon", "hairdresser", "barber shop", "hair stylist"] }
+    ],
+    "DK": [
+      { "name": "Hairdressers", "queries": ["hair salon", "hairdresser", "barber shop", "hair stylist"] }
+    ],
+    "GB": [
+      { "name": "Dentists", "queries": ["dentist", "dental clinic", "dental practice"] },
+      { "name": "Plumbers", "queries": ["plumber", "plumbing services", "emergency plumber"] },
+      { "name": "Electricians UK", "queries": ["electrician", "electrical contractor", "electrical services"] },
+      { "name": "Roofers", "queries": ["roofer", "roofing contractor", "roof repair"] },
+      { "name": "Builders", "queries": ["builder", "building contractor", "construction company"] },
+      { "name": "Carpenters", "queries": ["carpenter", "joiner", "carpentry services"] },
+      { "name": "Painters & Decorators", "queries": ["painter and decorator", "painting contractor", "decorator"] },
+      { "name": "Tilers", "queries": ["tiler", "tiling services", "wall and floor tiling"] },
+      { "name": "Landscapers", "queries": ["landscaper", "landscape gardener", "garden design"] },
+      { "name": "Cleaning Services", "queries": ["cleaning company", "office cleaning", "domestic cleaning"] },
+      { "name": "Removals", "queries": ["removal company", "man and van", "house removals"] },
+      { "name": "Solicitors", "queries": ["solicitor", "law firm", "legal services"] },
+      { "name": "Accountants", "queries": ["accountant", "accounting firm", "bookkeeping"] },
+      { "name": "Estate Agents", "queries": ["estate agent", "letting agent", "property agent"] },
+      { "name": "Mortgage Brokers", "queries": ["mortgage broker", "mortgage advisor"] },
+      { "name": "Physiotherapists", "queries": ["physiotherapist", "physio clinic", "sports therapy"] },
+      { "name": "Cosmetic Clinics", "queries": ["cosmetic clinic", "aesthetic clinic", "skin clinic"] },
+      { "name": "Personal Trainers", "queries": ["personal trainer", "pt studio", "fitness studio"] },
+      { "name": "Driving Schools", "queries": ["driving school", "driving instructor"] },
+      { "name": "Pest Control", "queries": ["pest control", "exterminator", "rodent control"] }
+    ],
+    "IE": [
+      { "name": "Dentists", "queries": ["dentist", "dental clinic", "dental practice"] },
+      { "name": "Plumbers", "queries": ["plumber", "plumbing services", "emergency plumber"] },
+      { "name": "Electricians UK", "queries": ["electrician", "electrical contractor", "electrical services"] },
+      { "name": "Roofers", "queries": ["roofer", "roofing contractor", "roof repair"] },
+      { "name": "Builders", "queries": ["builder", "building contractor", "construction company"] },
+      { "name": "Carpenters", "queries": ["carpenter", "joiner", "carpentry services"] },
+      { "name": "Painters & Decorators", "queries": ["painter and decorator", "painting contractor", "decorator"] },
+      { "name": "Tilers", "queries": ["tiler", "tiling services", "wall and floor tiling"] },
+      { "name": "Landscapers", "queries": ["landscaper", "landscape gardener", "garden design"] },
+      { "name": "Cleaning Services", "queries": ["cleaning company", "office cleaning", "domestic cleaning"] },
+      { "name": "Removals", "queries": ["removal company", "man and van", "house removals"] },
+      { "name": "Solicitors", "queries": ["solicitor", "law firm", "legal services"] },
+      { "name": "Accountants", "queries": ["accountant", "accounting firm", "bookkeeping"] },
+      { "name": "Estate Agents", "queries": ["estate agent", "letting agent", "property agent"] },
+      { "name": "Mortgage Brokers", "queries": ["mortgage broker", "mortgage advisor"] },
+      { "name": "Physiotherapists", "queries": ["physiotherapist", "physio clinic", "sports therapy"] },
+      { "name": "Cosmetic Clinics", "queries": ["cosmetic clinic", "aesthetic clinic", "skin clinic"] },
+      { "name": "Personal Trainers", "queries": ["personal trainer", "pt studio", "fitness studio"] },
+      { "name": "Driving Schools", "queries": ["driving school", "driving instructor"] },
+      { "name": "Pest Control", "queries": ["pest control", "exterminator", "rodent control"] }
+    ]
+  },
+  "citiesByCountry": {
+    "SE": [
+      "Ale", "Alingsås", "Alvesta", "Aneby", "Arboga", "Arjeplog", "Arvidsjaur", "Arvika", "Askersund", "Avesta",
+      "Bengtsfors", "Berg", "Bjurholm", "Bjuv", "Boden", "Bollebygd", "Bollnäs", "Borgholm", "Borlänge", "Borås",
+      "Botkyrka", "Boxholm", "Bromölla", "Bräcke", "Burlöv", "Båstad", "Dals-Ed", "Danderyd", "Degerfors", "Dorotea",
+      "Eda", "Ekerö", "Eksjö", "Emmaboda", "Enköping", "Eskilstuna", "Eslöv", "Essunga", "Fagersta", "Falkenberg",
+      "Falköping", "Falun", "Filipstad", "Finspång", "Flen", "Forshaga", "Färgelanda", "Gagnef", "Gislaved", "Gnesta",
+      "Gnosjö", "Gotland", "Grums", "Grästorp", "Gullspång", "Gällivare", "Gävle", "Göteborg", "Götene", "Habo",
+      "Hagfors", "Hallsberg", "Hallstahammar", "Halmstad", "Hammarö", "Haninge", "Haparanda", "Heby", "Hedemora", "Helsingborg",
+      "Herrljunga", "Hjo", "Hofors", "Huddinge", "Hudiksvall", "Hultsfred", "Hylte", "Håbo", "Hällefors", "Härjedalen",
+      "Härnösand", "Härryda", "Hässleholm", "Höganäs", "Högsby", "Hörby", "Höör", "Jokkmokk", "Järfälla", "Jönköping",
+      "Kalix", "Kalmar", "Karlsborg", "Karlshamn", "Karlskoga", "Karlskrona", "Karlstad", "Katrineholm", "Kil", "Kinda",
+      "Kiruna", "Klippan", "Knivsta", "Kramfors", "Kristianstad", "Kristinehamn", "Krokom", "Kumla", "Kungsbacka", "Kungsör",
+      "Kungälv", "Kävlinge", "Köping", "Laholm", "Landskrona", "Laxå", "Lekeberg", "Leksand", "Lerum", "Lessebo",
+      "Lidingö", "Lidköping", "Lilla Edet", "Lindesberg", "Linköping", "Ljungby", "Ljusdal", "Ljusnarsberg", "Nora", "Lomma",
+      "Ludvika", "Luleå", "Lund", "Lycksele", "Lysekil", "Malmö", "Malung-Sälen", "Malå", "Mariestad", "Mark",
+      "Markaryd", "Mellerud", "Mjölby", "Mora", "Motala", "Mullsjö", "Munkedal", "Munkfors", "Mölndal", "Mönsterås",
+      "Mörbylånga", "Nacka", "Norberg", "Nordanstig", "Nordmaling", "Norrköping", "Norrtälje", "Norsjö", "Nybro", "Nykvarn",
+      "Nyköping", "Nynäshamn", "Nässjö", "Ockelbo", "Olofström", "Orsa", "Orust", "Osby", "Oskarshamn", "Ovanåker",
+      "Oxelösund", "Pajala", "Partille", "Perstorp", "Piteå", "Ragunda", "Robertsfors", "Ronneby", "Rättvik", "Sala",
+      "Salem", "Sandviken", "Sigtuna", "Simrishamn", "Sjöbo", "Skara", "Skellefteå", "Skinnskatteberg", "Skurup", "Skövde",
+      "Smedjebacken", "Sollefteå", "Sollentuna", "Solna", "Sorsele", "Sotenäs", "Staffanstorp", "Stenungsund", "Stockholm", "Storfors",
+      "Storuman", "Strängnäs", "Strömstad", "Strömsund", "Sundbyberg", "Sundsvall", "Sunne", "Surahammar", "Svalöv", "Svedala",
+      "Svenljunga", "Säffle", "Säter", "Sävsjö", "Söderhamn", "Söderköping", "Södertälje", "Sölvesborg", "Tanum", "Tibro",
+      "Tidaholm", "Tierp", "Timrå", "Tingsryd", "Tjörn", "Tomelilla", "Torsby", "Torsås", "Tranemo", "Tranås",
+      "Trelleborg", "Trollhättan", "Trosa", "Tyresö", "Täby", "Töreboda", "Uddevalla", "Ulricehamn", "Umeå", "Upplands Väsby",
+      "Upplands-Bro", "Uppsala", "Uppvidinge", "Vadstena", "Vaggeryd", "Valdemarsvik", "Vallentuna", "Vansbro", "Vara", "Varberg",
+      "Vaxholm", "Vellinge", "Vetlanda", "Vilhelmina", "Vimmerby", "Vindeln", "Vingåker", "Vårgårda", "Vänersborg", "Vännäs",
+      "Värmdö", "Värnamo", "Västervik", "Västerås", "Växjö", "Ydre", "Ystad", "Åmål", "Ånge", "Åre",
+      "Årjäng", "Åsele", "Åstorp", "Åtvidaberg", "Älmhult", "Älvdalen", "Älvkarleby", "Älvsbyn", "Ängelholm", "Öckerö",
+      "Ödeshög", "Örebro", "Örkelljunga", "Örnsköldsvik", "Östersund", "Österåker", "Östhammar", "Östra Göinge", "Överkalix", "Övertorneå"
+    ],
+    "NO": [
+      "Oslo", "Bergen", "Trondheim", "Stavanger", "Drammen", "Fredrikstad", "Kristiansand", "Sandnes", "Tromsø", "Sarpsborg",
+      "Skien", "Ålesund", "Sandefjord", "Haugesund", "Tønsberg", "Moss", "Porsgrunn", "Bodø", "Arendal", "Hamar",
+      "Larvik", "Halden", "Lillehammer", "Molde", "Harstad", "Kongsberg", "Gjøvik", "Horten", "Askøy", "Kristiansund",
+      "Kongsvinger", "Steinkjer", "Alta", "Narvik", "Mo i Rana", "Jessheim", "Elverum", "Lillestrøm", "Ski", "Bryne",
+      "Mandal", "Asker", "Nittedal", "Leirvik", "Kolbotn", "Eidsvoll", "Ås", "Mosjøen", "Egersund", "Sortland"
+    ],
+    "DK": [
+      "København", "Aarhus", "Odense", "Aalborg", "Esbjerg", "Randers", "Kolding", "Horsens", "Vejle", "Roskilde",
+      "Herning", "Silkeborg", "Næstved", "Fredericia", "Viborg", "Køge", "Holstebro", "Taastrup", "Slagelse", "Hillerød",
+      "Sønderborg", "Svendborg", "Hjørring", "Frederikshavn", "Nørresundby", "Ringsted", "Holbæk", "Haderslev", "Skive", "Birkerød",
+      "Farum", "Helsingør", "Nykøbing Falster", "Kalundborg", "Varde", "Nyborg", "Aabenraa", "Ikast", "Middelfart", "Grenaa"
+    ],
+    "GB": [
+      "London", "Birmingham", "Manchester", "Leeds", "Liverpool", "Sheffield", "Bristol", "Newcastle upon Tyne", "Nottingham", "Leicester",
+      "Coventry", "Bradford", "Cardiff", "Belfast", "Edinburgh", "Glasgow", "Aberdeen", "Dundee", "Inverness", "Stirling",
+      "Brighton", "Plymouth", "Portsmouth", "Southampton", "Oxford", "Cambridge", "Norwich", "York", "Swansea", "Newport",
+      "Wrexham", "Milton Keynes", "Reading", "Luton", "Bournemouth", "Poole", "Exeter", "Derby", "Stoke-on-Trent", "Sunderland",
+      "Middlesbrough", "Preston", "Bolton", "Wolverhampton", "Warrington", "Blackpool", "Doncaster", "Swindon", "Ipswich", "Northampton",
+      "Peterborough", "Chelmsford", "Colchester", "Maidstone", "St Albans", "Watford", "Slough", "Guildford", "Telford", "Shrewsbury",
+      "Worcester", "Gloucester", "Cheltenham", "Bath", "Salisbury", "Lincoln", "Hull", "Wakefield", "Huddersfield", "Harrogate",
+      "Carlisle", "Lancaster", "Chester", "Blackburn", "Burnley", "Rochdale", "Oldham", "Stockport", "Chesterfield", "Mansfield"
+    ],
+    "IE": [
+      "Dublin", "Cork", "Galway", "Limerick", "Waterford", "Drogheda", "Dundalk", "Swords", "Bray", "Navan",
+      "Kilkenny", "Ennis", "Tralee", "Carlow", "Naas", "Newbridge", "Portlaoise", "Mullingar", "Wexford", "Athlone",
+      "Letterkenny", "Sligo", "Clonmel", "Balbriggan", "Celbridge", "Tullamore", "Killarney", "Arklow", "Greystones", "Cobh"
+    ]
+  }
+}

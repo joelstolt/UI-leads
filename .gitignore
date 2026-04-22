@@ -1,0 +1,14 @@
+node_modules/
+.env
+.env.local
+leads.db
+leads.db-shm
+leads.db-wal
+output/*.csv
+output/*.json
+output/audits/
+output/seo-audits/
+*.log
+.fuse_hidden*
+leadsgoogle.db
+.DS_Store

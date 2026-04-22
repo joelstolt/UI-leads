@@ -1,0 +1,31 @@
+{
+  "name": "lead-scraper",
+  "version": "2.0.0",
+  "description": "Skrapa svenska hantverkare/servicebolag via SerpAPI — SQLite, inkrementellt, 20k+ leads",
+  "scripts": {
+    "scrape": "node scrape.js",
+    "enrich": "node enrich.js",
+    "enrich-corp": "node enrich-corp.js",
+    "enrich-usp": "node enrich-usp.js",
+    "enrich-tech": "node enrich-tech.js",
+    "enrich-sitemap": "node enrich-sitemap.js",
+    "enrich-ads": "node enrich-ads.js",
+    "enrich-domainrank": "node enrich-domainrank.js",
+    "discover": "node discover-allabolag.js",
+    "outreach": "node outreach-gen.js",
+    "pipeline": "node pipeline.js",
+    "sync": "node sync-to-turso.js",
+    "crm-sync": "node crm-sync.js",
+    "export": "node export.js",
+    "migrate": "node migrate.js",
+    "test": "node scrape.js --branch snickare --city Malmö --dry-run"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.90.0",
+    "better-sqlite3": "^12.9.0",
+    "cheerio": "^1.2.0",
+    "dotenv": "^16.4.5",
+    "p-limit": "^3.1.0",
+    "p-retry": "^4.6.2"
+  }
+}
