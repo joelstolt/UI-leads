@@ -9,15 +9,12 @@ import {
   computeScore,
   buildCategoryBars,
   cleanDomain,
-  formatToday,
-  scoreColorVar,
-  SEV_LABEL,
+  sevLabel,
 } from "../audit-data";
+import { t, formatDate } from "../audit-i18n";
 import "../audit.css";
 
 export const dynamic = "force-dynamic";
-
-// Issue/check/score-funktioner är delade via audit-data.ts.
 
 // ── Page ────────────────────────────────────────────────────────────
 export default async function AuditPage({ params }: { params: Promise<{ placeId: string }> }) {
@@ -29,16 +26,20 @@ export default async function AuditPage({ params }: { params: Promise<{ placeId:
   const h = await headers();
   const hostBrand = brandForHost(h.get("host") ?? undefined);
   const brand = getBrand(hostBrand ?? lead.brand);
+  const lang = brand.language;
+  const s = t(lang);
 
   const bench = lead.branch ? await getBranchBenchmark(lead.branch) : null;
-  const issues = buildIssues(lead);
-  const checks = buildChecks(lead);
-  const { score, grade, gradeClass } = computeScore(lead, checks);
-  const bars = buildCategoryBars(lead, bench);
+  const issues = buildIssues(lead, lang);
+  const checks = buildChecks(lead, lang);
+  const { score, grade, gradeClass } = computeScore(lead, checks, lang);
+  const bars = buildCategoryBars(lead, bench, lang);
 
   const domain = cleanDomain(lead.website);
   const failedChecks = checks.filter((c) => c.pass === false).length;
   const totalKnownChecks = checks.filter((c) => c.pass !== null).length;
+  const criticalCount = issues.filter((i) => i.severity === "critical").length;
+  const today = formatDate(lang);
 
   const radius = 70;
   const circumference = 2 * Math.PI * radius;
@@ -61,31 +62,31 @@ export default async function AuditPage({ params }: { params: Promise<{ placeId:
       <div className="audit-container">
         {/* Header */}
         <div className="audit-header">
-          <div className="audit-header-badge">SEO-analys</div>
+          <div className="audit-header-badge">{s.seoAnalysis}</div>
           <h1>{lead.name}</h1>
           <div className="subtitle">
-            {domain ?? "Ingen hemsida registrerad"}
+            {domain ?? s.noWebsite}
             {lead.branch ? ` — ${lead.branch.toLowerCase()}` : ""}
-            {lead.city ? ` i ${lead.city}` : ""}
+            {lead.city ? (lang === "en" ? ` in ${lead.city}` : ` i ${lead.city}`) : ""}
           </div>
           <div className="date">
-            Rapport genererad {formatToday()} · {brand.name}
+            {s.reportGenerated} {today} · {brand.name}
           </div>
           <div className="audit-header-meta">
             {lead.rating != null && (
               <span>
-                <strong>Google-betyg:</strong> ★ {lead.rating.toFixed(1)}
+                <strong>{s.googleRating}</strong> ★ {lead.rating.toFixed(1)}
                 {lead.reviews != null && ` (${lead.reviews})`}
               </span>
             )}
             {lead.org_nr && (
               <span>
-                <strong>Org.nr:</strong> {lead.org_nr}
+                <strong>{s.orgNr}</strong> {lead.org_nr}
               </span>
             )}
             {lead.employees != null && (
               <span>
-                <strong>Anställda:</strong> {lead.employees}
+                <strong>{s.employees}</strong> {lead.employees}
               </span>
             )}
           </div>
@@ -111,23 +112,20 @@ export default async function AuditPage({ params }: { params: Promise<{ placeId:
                 {score}
               </div>
             </div>
-            <div className="score-label">SEO-hälsa</div>
+            <div className="score-label">{s.seoHealth}</div>
             <div className={`score-grade ${gradeClass}`}>{grade}</div>
-            <div className="score-sub">
-              {failedChecks} av {totalKnownChecks} kontrollpunkter misslyckas · {issues.length} brister
-            </div>
+            <div className="score-sub">{s.checksFailedOf(failedChecks, totalKnownChecks, issues.length)}</div>
           </div>
         </div>
 
         {/* Sammanfattning */}
         <div className="audit-section">
-          <h2>Sammanfattning</h2>
+          <h2>{s.summary}</h2>
           <p>
-            Vi har analyserat {domain ? <code style={{ color: "var(--accent-soft)" }}>{domain}</code> : "er digitala närvaro"}{" "}
-            med samma kontroller som Google Search Console och Lighthouse.{" "}
-            {failedChecks > 0
-              ? `Vi hittade ${issues.length} konkreta brister — ${issues.filter((i) => i.severity === "critical").length} kritiska — som direkt kostar er kunder varje dag.`
-              : "Tekniskt sett ser det mesta bra ut. Vi kan ändå hjälpa er växa genom innehåll, annonser eller konvertering."}
+            {s.summaryAnalyzedPrefix}
+            {domain ? <code style={{ color: "var(--accent-soft)" }}>{domain}</code> : s.summaryYourDigitalPresence}
+            {s.summaryWithSameChecks}
+            {failedChecks > 0 ? s.summaryFoundIssues(issues.length, criticalCount) : s.summaryAllGood}
           </p>
           {bars.length > 0 && (
             <div className="category-bars">
@@ -167,14 +165,12 @@ export default async function AuditPage({ params }: { params: Promise<{ placeId:
           <details className="audit-section" open>
             <summary>
               <div>
-                <h2>{issues.length} saker som kostar er kunder idag</h2>
-                <div className="sum-desc">
-                  Sorterade efter hur mycket de påverkar er synlighet och konvertering. Alla är fixbara.
-                </div>
+                <h2>{s.issuesHeading(issues.length)}</h2>
+                <div className="sum-desc">{s.issuesSubtitle}</div>
               </div>
               <span className="sum-toggle">
-                <span className="label-closed">Visa alla</span>
-                <span className="label-open">Dölj</span>
+                <span className="label-closed">{s.showAll}</span>
+                <span className="label-open">{s.hide}</span>
                 <svg className="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
                   <polyline points="6 9 12 15 18 9" />
                 </svg>
@@ -186,7 +182,7 @@ export default async function AuditPage({ params }: { params: Promise<{ placeId:
                   <div className="suggestion-top">
                     <div className="suggestion-number">{i + 1}</div>
                     <h3>{issue.title}</h3>
-                    <span className={`sev sev-${issue.severity}`}>{SEV_LABEL[issue.severity]}</span>
+                    <span className={`sev sev-${issue.severity}`}>{sevLabel(lang, issue.severity)}</span>
                   </div>
                   <div className="konsekvens">{issue.konsekvens}</div>
                   <div className="losning">{issue.losning}</div>
@@ -200,18 +196,16 @@ export default async function AuditPage({ params }: { params: Promise<{ placeId:
         <details className="audit-section">
           <summary>
             <div>
-              <h2>{checks.length} SEO-kontrollpunkter</h2>
-              <div className="sum-desc">
-                Samma kontroller som Google Search Console —{" "}
-                <strong>
-                  {failedChecks} av {totalKnownChecks} misslyckas
-                </strong>{" "}
-                idag.
-              </div>
+              <h2>{s.checksHeading(checks.length)}</h2>
+              <div className="sum-desc"
+                dangerouslySetInnerHTML={{
+                  __html: s.checksSubtitle(failedChecks, totalKnownChecks).replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>"),
+                }}
+              />
             </div>
             <span className="sum-toggle">
-              <span className="label-closed">Visa checklistan</span>
-              <span className="label-open">Dölj</span>
+              <span className="label-closed">{s.showChecklist}</span>
+              <span className="label-open">{s.hide}</span>
               <svg className="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
                 <polyline points="6 9 12 15 18 9" />
               </svg>
@@ -220,7 +214,7 @@ export default async function AuditPage({ params }: { params: Promise<{ placeId:
           <div className="section-body">
             <div className="check-header">
               <div></div>
-              <div className="check-col-head">Status</div>
+              <div className="check-col-head">{s.statusCol}</div>
             </div>
             {checks.map((c, i) => (
               <div key={i} className="check-item">
@@ -239,10 +233,8 @@ export default async function AuditPage({ params }: { params: Promise<{ placeId:
 
         {/* Vision */}
         <div className="audit-section">
-          <h2>Vad öppnar sig när vi fixat detta</h2>
-          <p>
-            Inom 3-6 månader med rätt teknisk grund och kontinuerlig närvaro — vad ni kan räkna med:
-          </p>
+          <h2>{s.visionHeading}</h2>
+          <p>{s.visionIntro}</p>
           <div className="vision-grid">
             <div className="vision-card">
               <div className="ic">
@@ -251,10 +243,12 @@ export default async function AuditPage({ params }: { params: Promise<{ placeId:
                   <path d="m7 14 3-3 4 4 5-6" />
                 </svg>
               </div>
-              <h4>Ranking på lokala nyckelord</h4>
+              <h4>{s.visionCards.ranking.title}</h4>
               <p>
-                Sökningar som "{lead.branch?.toLowerCase() ?? "er tjänst"} {lead.city ?? "er ort"}" — där
-                era konkurrenter ligger idag — blir möjliga att nå med rätt tjänste- + ort-sidor.
+                {s.visionCards.ranking.body(
+                  lead.branch?.toLowerCase() ?? s.visionDefaultBranch,
+                  lead.city ?? s.visionDefaultCity
+                )}
               </p>
             </div>
             <div className="vision-card">
@@ -264,11 +258,8 @@ export default async function AuditPage({ params }: { params: Promise<{ placeId:
                   <path d="M12 7v5l3 2" />
                 </svg>
               </div>
-              <h4>Rich Snippets i sökresultaten</h4>
-              <p>
-                Schema.org-markup visar ert Google-betyg, öppettider och tjänster direkt i sökresultaten.
-                FAQ-schema ger expanderbara utdrag som tar mer plats.
-              </p>
+              <h4>{s.visionCards.richSnippets.title}</h4>
+              <p>{s.visionCards.richSnippets.body}</p>
             </div>
             <div className="vision-card">
               <div className="ic">
@@ -276,11 +267,8 @@ export default async function AuditPage({ params }: { params: Promise<{ placeId:
                   <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
                 </svg>
               </div>
-              <h4>Fler förfrågningar dygnet runt</h4>
-              <p>
-                Dedikerat offertformulär med tjänsteval och tidsram — öppet 24/7 även när telefonen ligger
-                på laddning. Strukturerade leads som kan följas upp nästa dag.
-              </p>
+              <h4>{s.visionCards.requests24_7.title}</h4>
+              <p>{s.visionCards.requests24_7.body}</p>
             </div>
             <div className="vision-card">
               <div className="ic">
@@ -289,11 +277,8 @@ export default async function AuditPage({ params }: { params: Promise<{ placeId:
                   <circle cx="12" cy="9" r={2.5} />
                 </svg>
               </div>
-              <h4>Lokal auktoritet som konkurrensfördel</h4>
-              <p>
-                Ortsspecifika sidor med lokal copy bygger relevans i Googles lokala 3-pack — även utanför
-                stadens kärna. Ni fångar kunder i hela er region, inte bara centralorten.
-              </p>
+              <h4>{s.visionCards.localAuthority.title}</h4>
+              <p>{s.visionCards.localAuthority.body}</p>
             </div>
             <div className="vision-card">
               <div className="ic">
@@ -302,11 +287,8 @@ export default async function AuditPage({ params }: { params: Promise<{ placeId:
                   <path d="M2 12h20" />
                 </svg>
               </div>
-              <h4>Snabbare sajt = bättre konvertering</h4>
-              <p>
-                Varje sekund i kortare laddtid = ca 10 % fler konverterade besökare. Moderna bildformat,
-                CDN och cache ger Lighthouse Performance 85+ på mobil.
-              </p>
+              <h4>{s.visionCards.performance.title}</h4>
+              <p>{s.visionCards.performance.body}</p>
             </div>
             <div className="vision-card">
               <div className="ic">
@@ -315,37 +297,30 @@ export default async function AuditPage({ params }: { params: Promise<{ placeId:
                   <path d="M5 18a7 7 0 1 0 14 0Z" />
                 </svg>
               </div>
-              <h4>Trovärdighet som stänger affärer</h4>
-              <p>
-                Dedikerad referenssida + case på tjänstesidorna. Kunder som googlar er hittar social proof
-                på 30 sekunders skanning — och väljer er framför konkurrenten.
-              </p>
+              <h4>{s.visionCards.credibility.title}</h4>
+              <p>{s.visionCards.credibility.body}</p>
             </div>
           </div>
         </div>
 
         {/* CTA */}
         <div className="cta-section">
-          <h2>Vill ni att vi fixar det här?</h2>
-          <p>30-min gratis genomgång där vi går igenom rapporten och visar exakt hur vi hade löst varje punkt.</p>
+          <h2>{s.ctaHeading}</h2>
+          <p>{s.ctaLead}</p>
           <ul className="cta-list">
-            <li>Teknisk SEO-grund: HTTPS, schema.org, sitemap, mobilanpassning</li>
-            <li>Djupa tjänstesidor + ortsidor för lokal ranking</li>
-            <li>Kontaktformulär + offertformulär öppet dygnet runt</li>
-            <li>Google Business Profile-optimering (om ej redan gjort)</li>
-            <li>Löpande SEO-arbete efter lansering — inte bara bygga och lämna</li>
+            {s.ctaList.map((item, i) => <li key={i}>{item}</li>)}
           </ul>
           <div className="cta-buttons">
             <a
               className="cta-btn cta-btn-primary"
-              href={`mailto:${brand.email}?subject=${encodeURIComponent(`Audit för ${lead.name}`)}&body=${encodeURIComponent(
-                `Hej!\n\nJag såg er SEO-rapport: ${brand.website}\n\nJag vill boka 30 min gratis genomgång.\n\nMvh`
+              href={`mailto:${brand.email}?subject=${encodeURIComponent(s.ctaMailSubject(lead.name))}&body=${encodeURIComponent(
+                s.ctaMailBody(brand.website)
               )}`}
             >
-              Boka 30-min genomgång
+              {s.ctaButtonPrimary}
             </a>
             <a className="cta-btn cta-btn-ghost" href={`tel:${brand.phone.replace(/\s/g, "")}`}>
-              Ring {brand.phone}
+              {s.ctaButtonCall} {brand.phone}
             </a>
           </div>
         </div>
@@ -354,7 +329,7 @@ export default async function AuditPage({ params }: { params: Promise<{ placeId:
         <div className="audit-footer">
           <div className="footer-grid">
             <div>
-              <strong>Bolag</strong>
+              <strong>{s.footerCompany}</strong>
               <span>
                 {lead.name}
                 {lead.address && (
@@ -365,28 +340,28 @@ export default async function AuditPage({ params }: { params: Promise<{ placeId:
                 )}
                 {lead.rating != null && (
                   <>
-                    <br />★ {lead.rating.toFixed(1)} på Google
-                    {lead.reviews != null && ` · ${lead.reviews} recensioner`}
+                    <br />★ {lead.rating.toFixed(1)} {s.footerGoogleStar}
+                    {lead.reviews != null && ` · ${lead.reviews} ${s.footerReviews}`}
                   </>
                 )}
               </span>
             </div>
             <div>
-              <strong>Analyserad domän</strong>
+              <strong>{s.footerDomain}</strong>
               <span>
-                {domain ?? "—"}
+                {domain ?? s.footerDomainEmpty}
                 {lead.tech_stack && (
                   <>
                     <br />
-                    Plattform: {lead.tech_stack}
+                    {s.footerPlatform} {lead.tech_stack}
                   </>
                 )}
               </span>
             </div>
             <div>
-              <strong>Bransch</strong>
+              <strong>{s.footerBranch}</strong>
               <span>
-                {lead.branch ?? "—"}
+                {lead.branch ?? s.footerDomainEmpty}
                 {lead.sni_code && (
                   <>
                     <br />
@@ -396,7 +371,7 @@ export default async function AuditPage({ params }: { params: Promise<{ placeId:
               </span>
             </div>
             <div>
-              <strong>Analyserad av</strong>
+              <strong>{s.footerAnalyzedBy}</strong>
               <span>
                 {brand.name}
                 <br />
@@ -406,7 +381,7 @@ export default async function AuditPage({ params }: { params: Promise<{ placeId:
           </div>
           <div className="footer-copy">
             <p>
-              Rapport av{" "}
+              {s.footerReportBy}{" "}
               <Link href={brand.website} target="_blank" rel="noopener">
                 {brand.name}
               </Link>{" "}
@@ -415,7 +390,7 @@ export default async function AuditPage({ params }: { params: Promise<{ placeId:
           </div>
         </div>
 
-        <div className="deadline">Konfidentiellt arbetsmaterial · rapport genererad {formatToday()}.</div>
+        <div className="deadline">{s.footerConfidential} {today}.</div>
       </div>
     </div>
   );
