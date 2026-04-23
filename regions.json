@@ -28,6 +28,7 @@
     ],
     "NO": [
       { "name": "Håndverkere", "queries": ["snekker", "tømrer", "maler", "rørlegger", "elektriker", "byggefirma", "håndverker"] },
+      { "name": "Malere", "queries": ["maler", "malerfirma", "malermester"] },
       { "name": "Rengjøring", "queries": ["rengjøringsfirma", "vaskebyrå", "hjemmerengjøring", "flyttevask", "kontorrengjøring"] },
       { "name": "Hairdressers", "queries": ["hair salon", "hairdresser", "barber shop", "hair stylist"] }
     ],
