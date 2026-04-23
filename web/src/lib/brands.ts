@@ -37,7 +37,7 @@ export const BRANDS: Record<BrandKey, Brand> = {
   "wlm-se": {
     key: "wlm-se",
     name: "We Love Marketing",
-    domain: "welovemarketing.se",
+    domain: "audit.welovemarketing.se",
     email: "joel@welovemarketing.se",
     phone: "+46 73 554 69 68",
     website: "https://www.welovemarketing.se",
@@ -52,7 +52,7 @@ export const BRANDS: Record<BrandKey, Brand> = {
   "wlm-ie": {
     key: "wlm-ie",
     name: "We Love Marketing",
-    domain: "welovemarketing.ie",
+    domain: "audit.welovemarketing.ie",
     email: "hello@welovemarketing.ie",
     phone: "+46 73 554 69 68",
     website: "https://www.welovemarketing.ie",
@@ -67,7 +67,7 @@ export const BRANDS: Record<BrandKey, Brand> = {
   flodo: {
     key: "flodo",
     name: "Flodo",
-    domain: "flodo.se",
+    domain: "audit.flodo.se",
     email: "hej@flodo.se",
     phone: "+46 72 987 03 87",
     website: "https://flodo.se",
