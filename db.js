@@ -55,8 +55,10 @@ function getDb() {
       corp_enriched_at  TEXT,
 
       created_at        TEXT DEFAULT (datetime('now')),
-      updated_at        TEXT DEFAULT (datetime('now'))
+      updated_at        TEXT DEFAULT (datetime('now')),
+      slug              TEXT
     );
+    CREATE UNIQUE INDEX IF NOT EXISTS idx_companies_slug ON companies(slug);
 
     CREATE TABLE IF NOT EXISTS runs (
       id            INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -115,6 +117,7 @@ function upsertCompany(data) {
     data.rating ?? null, data.reviews ?? null, data.status ?? null,
     new Date().toISOString()
   );
+  setSlugIfMissing(data.place_id, data.name);
   return true;
 }
 
@@ -277,6 +280,43 @@ function setBrand(placeId, brandKey, force = false) {
   return getDb().prepare(sql).run(brandKey, placeId).changes;
 }
 
+function ensureSlugColumn() {
+  const db = getDb();
+  const cols = db.prepare("PRAGMA table_info(companies)").all().map((r) => r.name);
+  if (!cols.includes("slug")) {
+    db.exec("ALTER TABLE companies ADD COLUMN slug TEXT;");
+  }
+  db.exec("CREATE UNIQUE INDEX IF NOT EXISTS idx_companies_slug ON companies(slug);");
+}
+
+function slugifyName(s) {
+  const subs = { "å": "a", "ä": "a", "ö": "o", "é": "e", "è": "e", "ü": "u", "ß": "ss", "&": "and" };
+  let out = (s || "").toLowerCase();
+  for (const [k, v] of Object.entries(subs)) out = out.split(k).join(v);
+  out = out.replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+  return out || "lead";
+}
+
+/**
+ * Sätt unik slug på en lead om den saknas. Hanterar kollisioner med -2, -3, …
+ */
+function setSlugIfMissing(placeId, name) {
+  ensureSlugColumn();
+  const db = getDb();
+  const existing = db.prepare("SELECT slug FROM companies WHERE place_id = ?").get(placeId);
+  if (!existing || existing.slug) return existing ? existing.slug : null;
+
+  const base = slugifyName(name);
+  let candidate = base;
+  let n = 1;
+  while (db.prepare("SELECT 1 FROM companies WHERE slug = ? AND place_id != ?").get(candidate, placeId)) {
+    n += 1;
+    candidate = `${base}-${n}`;
+  }
+  db.prepare("UPDATE companies SET slug = ?, updated_at = datetime('now') WHERE place_id = ?").run(candidate, placeId);
+  return candidate;
+}
+
 module.exports = {
   getDb,
   upsertCompany,
@@ -291,4 +331,7 @@ module.exports = {
   getStats,
   ensureBrandColumn,
   setBrand,
+  ensureSlugColumn,
+  setSlugIfMissing,
+  slugifyName,
 };

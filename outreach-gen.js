@@ -229,7 +229,7 @@ async function generate(lead, auditBase) {
   const isProd = auditBase && !auditBase.includes("localhost");
   const baseUrl = isProd ? `https://${brand.domain}` : auditBase;
   const auditUrl = baseUrl
-    ? `${baseUrl.replace(/\/$/, "")}/audit/${encodeURIComponent(lead.place_id)}`
+    ? `${baseUrl.replace(/\/$/, "")}/audit/${encodeURIComponent(lead.slug || lead.place_id)}`
     : null;
 
   const res = await client.messages.create({

@@ -21,7 +21,7 @@
 
 require("dotenv").config({ override: true });
 const regions = require("./regions.json");
-const { getDb, ensureBrandColumn, setBrand } = require("./db");
+const { getDb, ensureBrandColumn, setBrand, setSlugIfMissing } = require("./db");
 
 // Brand-mapping: SE/NO/DK → wlm-se, GB/IE → wlm-ie
 function brandForCountry(cc) {
@@ -138,6 +138,7 @@ function upsert(branch, city, c, brandKey) {
         orgnr, revenue, employees, sni, now, now);
   // Brand: använd CLI-arg om satt, annars default wlm-se (allabolag = svenska bolag)
   setBrand(placeId, brandKey || "wlm-se");
+  setSlugIfMissing(placeId, name);
   return { isNew: true, updated: false };
 }
 

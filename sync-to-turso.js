@@ -58,6 +58,25 @@ async function ensureSchema(table) {
   // CREATE TABLE ... kommer att ge fel om tabellen redan finns — använd IF NOT EXISTS
   const idempotent = sql.replace(/^CREATE TABLE(?! IF NOT EXISTS)/, "CREATE TABLE IF NOT EXISTS");
   await remote.execute(idempotent);
+  await ensureColumns(table);
+}
+
+async function ensureColumns(table) {
+  const localCols = local.prepare(`PRAGMA table_info(${table})`).all();
+  const remoteRes = await remote.execute(`PRAGMA table_info(${table})`);
+  const remoteCols = new Set(remoteRes.rows.map((r) => String(r.name)));
+
+  for (const col of localCols) {
+    if (remoteCols.has(col.name)) continue;
+    const typePart = col.type ? ` ${col.type}` : "";
+    const defPart = col.dflt_value != null ? ` DEFAULT ${col.dflt_value}` : "";
+    try {
+      await remote.execute(`ALTER TABLE ${table} ADD COLUMN ${col.name}${typePart}${defPart}`);
+      console.log(`  + ${table}.${col.name}${typePart}`);
+    } catch (e) {
+      if (!/duplicate column/i.test(String(e.message || e))) throw e;
+    }
+  }
 }
 
 async function ensureIndexes() {

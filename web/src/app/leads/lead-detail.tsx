@@ -490,11 +490,12 @@ function MetaAdsBadge({ lead }: { lead: Company }) {
   );
 }
 
-function AuditLinkBlock({ placeId }: { placeId: string }) {
+function AuditLinkBlock({ placeId, slug }: { placeId: string; slug?: string | null }) {
   const [copied, setCopied] = useState(false);
-  const path = `/audit/${encodeURIComponent(placeId)}`;
+  const key = slug || placeId;
+  const path = `/audit/${encodeURIComponent(key)}`;
   const url = typeof window !== "undefined" ? `${window.location.origin}${path}` : path;
-  const htmlExportPath = `/api/audit-html/${encodeURIComponent(placeId)}`;
+  const htmlExportPath = `/api/audit-html/${encodeURIComponent(key)}`;
 
   const copy = async () => {
     try {
@@ -699,7 +700,7 @@ export function LeadDetail({
 
               <BenchmarkBlock lead={lead} bench={bench} />
 
-              <AuditLinkBlock placeId={lead.place_id} />
+              <AuditLinkBlock placeId={lead.place_id} slug={lead.slug} />
 
               <OutreachBlock lead={lead} />
 

@@ -80,6 +80,7 @@ export type Company = {
   domain_rank_int: number | null;
   domain_rank_at: string | null;
   brand: string | null;
+  slug: string | null;
   created_at: string;
   updated_at: string;
 };
@@ -364,11 +365,14 @@ export async function getLeads(filters: LeadFilters = {}) {
   };
 }
 
-export async function getLeadById(placeId: string): Promise<Company | null> {
-  const r = await getClient().execute({
-    sql: "SELECT * FROM companies WHERE place_id = ?",
-    args: [placeId],
-  });
+export async function getLeadById(idOrSlug: string): Promise<Company | null> {
+  const db = getClient();
+  const hasSlug = await colExists("companies", "slug");
+  const sql = hasSlug
+    ? "SELECT * FROM companies WHERE slug = ? OR place_id = ? LIMIT 1"
+    : "SELECT * FROM companies WHERE place_id = ? LIMIT 1";
+  const args = hasSlug ? [idOrSlug, idOrSlug] : [idOrSlug];
+  const r = await db.execute({ sql, args });
   const row = r.rows[0];
   return row ? ({ ...row } as unknown as Company) : null;
 }
