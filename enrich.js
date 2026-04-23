@@ -268,12 +268,20 @@ async function main() {
     limit = parseInt(args[limitIdx + 1]);
   }
 
+  const branchesIdx = args.indexOf("--branches");
+  const branchesArg =
+    branchesIdx !== -1 && args[branchesIdx + 1]
+      ? args[branchesIdx + 1].split(",").map((s) => s.trim())
+      : null;
+  const filterByBranch = (rows) =>
+    branchesArg ? rows.filter((r) => branchesArg.includes(r.branch)) : rows;
+
   const runEmail     = !pagespeedOnly;
   const runPagespeed = !emailOnly;
 
   // ── Email-scraping ───────────────────────────────────────
   if (runEmail) {
-    const companies = getCompaniesNeedingEmail(limit);
+    const companies = filterByBranch(getCompaniesNeedingEmail(10000)).slice(0, limit);
     console.log(`📧 Email-scraping: ${companies.length} bolag att bearbeta`);
 
     if (companies.length > 0) {
@@ -304,7 +312,7 @@ async function main() {
 
   // ── PageSpeed ────────────────────────────────────────────
   if (runPagespeed) {
-    const companies = getCompaniesNeedingPagespeed(limit);
+    const companies = filterByBranch(getCompaniesNeedingPagespeed(10000)).slice(0, limit);
     console.log(`\n🚀 PageSpeed: ${companies.length} bolag att analysera`);
 
     if (companies.length > 0) {

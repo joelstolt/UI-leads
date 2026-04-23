@@ -32,19 +32,24 @@ const MAX_TEXT_CHARS = 6000; // Begränsa input till Haiku
 
 // ── DB-helpers (USP-kolumner inte i db.js ännu) ──────────────
 
-function getCompaniesNeedingUsp(limit) {
-  return getDb()
-    .prepare(`
-      SELECT place_id, name, website
-      FROM companies
-      WHERE website IS NOT NULL AND website != ''
-        AND usp_extracted_at IS NULL
-      ORDER BY
-        CASE WHEN priority IN ('🔥 A+', '🟡 A') THEN 0 ELSE 1 END,
-        created_at ASC
-      LIMIT ?
-    `)
-    .all(limit);
+function getCompaniesNeedingUsp(limit, branches = null) {
+  const where = ["website IS NOT NULL", "website != ''", "usp_extracted_at IS NULL"];
+  const params = [];
+  if (branches && branches.length) {
+    where.push(`branch IN (${branches.map(() => "?").join(",")})`);
+    params.push(...branches);
+  }
+  const sql = `
+    SELECT place_id, name, website
+    FROM companies
+    WHERE ${where.join(" AND ")}
+    ORDER BY
+      CASE WHEN priority IN ('🔥 A+', '🟡 A') THEN 0 ELSE 1 END,
+      created_at ASC
+    LIMIT ?
+  `;
+  params.push(limit);
+  return getDb().prepare(sql).all(...params);
 }
 
 function updateUsp(placeId, usps) {
@@ -186,10 +191,16 @@ async function main() {
   const limitIdx = args.indexOf("--limit");
   if (limitIdx !== -1 && args[limitIdx + 1]) limit = parseInt(args[limitIdx + 1]);
 
+  const branchesIdx = args.indexOf("--branches");
+  const branches =
+    branchesIdx !== -1 && args[branchesIdx + 1]
+      ? args[branchesIdx + 1].split(",").map((s) => s.trim())
+      : null;
+
   // Lägg till USP-kolumner om de inte finns
   ensureUspColumns();
 
-  const companies = getCompaniesNeedingUsp(limit);
+  const companies = getCompaniesNeedingUsp(limit, branches);
 
   console.log("💡 USP-extraktion — Claude Haiku");
   console.log(`   Modell: ${MODEL}`);

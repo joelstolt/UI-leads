@@ -126,6 +126,15 @@ async function main() {
     ]);
   }
 
+  // 8. Sync till Turso så prod-sajten får uppdaterade leads
+  if (!opts.skip.has("sync")) {
+    if (process.env.TURSO_DATABASE_URL && process.env.TURSO_AUTH_TOKEN) {
+      steps.push(["Sync till Turso", "sync-to-turso.js", []]);
+    } else {
+      console.log("\n   ℹ️  Turso-sync skippad (TURSO_DATABASE_URL/TURSO_AUTH_TOKEN saknas).");
+    }
+  }
+
   for (const [label, script, args] of steps) {
     await runStep(label, script, args);
   }
