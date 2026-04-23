@@ -63,7 +63,7 @@ export async function GET(req: NextRequest) {
     zip.file(filename, html);
   }
 
-  const buf = await zip.generateAsync({ type: "nodebuffer" });
+  const buf = await zip.generateAsync({ type: "arraybuffer" });
   const stamp = new Date().toISOString().slice(0, 10);
   return new Response(buf, {
     headers: {
