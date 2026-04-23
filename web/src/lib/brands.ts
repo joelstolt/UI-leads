@@ -52,7 +52,7 @@ export const BRANDS: Record<BrandKey, Brand> = {
   "wlm-ie": {
     key: "wlm-ie",
     name: "We Love Marketing",
-    domain: "audit.welovemarketing.ie",
+    domain: "audit.welovemarketing.se",
     email: "hello@welovemarketing.ie",
     phone: "+46 73 554 69 68",
     website: "https://www.welovemarketing.ie",
@@ -104,10 +104,10 @@ export function brandForCountry(countryCode: string | null): BrandKey {
 export function brandForHost(host: string | undefined): BrandKey | null {
   if (!host) return null;
   const h = host.toLowerCase().replace(/^www\./, "");
-  for (const brand of Object.values(BRANDS)) {
-    if (brand.domain === h) return brand.key;
-  }
-  return null;
+  const matches = Object.values(BRANDS).filter((b) => b.domain === h);
+  // Ambiguous (flera brands delar domain) → fall tillbaka till lead.brand
+  if (matches.length !== 1) return null;
+  return matches[0].key;
 }
 
 export function getBrand(key: string | null | undefined): Brand {
